@@ -1,0 +1,329 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #aaaaaa; /* Light gray text */
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Increase height significantly for multiple rotations */
+    height: 600vh; /* Adjust as needed */
+}
+
+.container {
+    max-width: 1400px; /* Wider container for two columns */
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Graphic element styling - Positioned so orange dot is centered */
+.graphic-element {
+    position: fixed; /* Fixed position */
+    width: 200px;
+    height: 60px;
+    background: linear-gradient(to right, #333333, #555555);
+    border-radius: 30px;
+    overflow: hidden;
+    z-index: 10;
+    /* Position the bar so the orange dot (175px from left, 30px from top) is at screen center */
+    top: calc(50% - 30px); /* 50% screen height minus half bar height */
+    left: calc(50% - 175px); /* 50% screen width minus distance from left edge to dot */
+    /* Set transform origin to the orange dot's position within the bar */
+    transform-origin: 175px 30px; /* X=175px (dot position), Y=30px (center) */
+    transform: rotate(0deg); /* Initial rotation */
+    transition: transform 0.1s linear;
+}
+
+.graphic-element::after {
+    content: "";
+    position: absolute;
+    top: 50%; /* Center vertically */
+    right: 25px; /* 25px from the right edge */
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: #ff6347; /* Orange-red dot */
+    border-radius: 50%;
+}
+
+/* Two-column layout */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center columns */
+    position: fixed; /* Fixed position for content/image */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 0 5%; /* Add padding */
+    pointer-events: none; /* Allow scrolling through */
+}
+
+.content-column, .image-column {
+    width: 45%; /* Adjust width as needed */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    pointer-events: auto; /* Enable interaction within columns */
+}
+
+.content-column {
+    align-items: flex-start; /* Align text to the left */
+}
+
+.image-column {
+    align-items: flex-end; /* Align images to the right */
+}
+
+/* Content and Image Sections */
+.content-section, .image-section {
+    position: absolute; /* Absolute position within columns */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+    z-index: 5;
+}
+
+.content-section {
+    left: 0;
+    text-align: left;
+    max-width: 500px;
+    transform: translateY(-50%) translateX(-50px); /* Start from left */
+}
+
+.image-section {
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%) translateX(50px); /* Start from right */
+}
+
+/* Active state for fade-in/slide-in */
+.content-section.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.image-section.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Text styles */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #cccccc;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ff6347;
+    transition: width 1s ease-in-out 0.3s;
+}
+
+.content-section.active h1::after {
+    width: 100%;
+}
+
+p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition-delay: 0.2s;
+}
+
+.content-section.active p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-section.active p:nth-child(3) {
+    transition-delay: 0.4s;
+}
+
+.content-section.active p:nth-child(4) {
+    transition-delay: 0.6s;
+}
+
+strong {
+    color: #ffffff;
+    font-weight: 400;
+}
+
+/* Image Placeholder Styles */
+.image-placeholder {
+    width: 300px; /* Adjust size */
+    height: 400px; /* Adjust size */
+    background-color: #1a1a1a; /* Darker placeholder background */
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    position: relative;
+    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+.image-section.active .image-placeholder {
+    transform: scale(1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+.image-section:not(.active) .image-placeholder {
+    transform: scale(0.9);
+}
+
+.abstract-icon {
+    width: 80%;
+    height: 80%;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    transition-delay: 0.3s;
+}
+
+.image-section.active .abstract-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.image-text {
+    font-size: 1.2rem;
+    color: #ffffff;
+    position: absolute;
+    bottom: 5px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition-delay: 0.6s;
+}
+
+.image-section.active .image-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* SVG animation for paths and shapes */
+.abstract-icon path, 
+.abstract-icon circle, 
+.abstract-icon polygon {
+    transform-origin: center;
+    animation: pulse 8s infinite alternate ease-in-out;
+}
+
+.abstract-icon path:nth-child(2),
+.abstract-icon circle:nth-child(2),
+.abstract-icon polygon:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.abstract-icon path:nth-child(3),
+.abstract-icon circle:nth-child(3),
+.abstract-icon polygon:nth-child(3) {
+    animation-delay: 2s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(0.95);
+    }
+}
+
+/* Responsive styles */
+@media screen and (max-width: 992px) {
+    .content-wrapper {
+        padding: 0 2%;
+    }
+    .content-column, .image-column {
+        width: 48%;
+    }
+    .image-placeholder {
+        width: 250px;
+        height: 350px;
+    }
+    h1 { font-size: 2rem; }
+    p { font-size: 0.9rem; }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        height: auto; /* Revert height for stacked layout */
+        min-height: 300vh; /* Ensure scroll space */
+    }
+    .content-wrapper {
+        flex-direction: column;
+        position: relative; /* Change from fixed */
+        height: auto;
+        padding: 5% 5%;
+    }
+    .content-column, .image-column {
+        width: 100%;
+        max-width: 500px;
+        margin: 50px auto;
+        height: auto;
+        align-items: center; /* Center items */
+        text-align: center;
+    }
+    .content-section, .image-section {
+        position: relative; /* Change from absolute */
+        transform: none; /* Reset transform */
+        margin-bottom: 50px; /* Add space between sections */
+        opacity: 1; /* Always visible */
+        visibility: visible;
+        transition: none; /* Disable transitions for stacked layout */
+    }
+    .content-section:not(:first-child), .image-section:not(:first-child) {
+        display: none; /* Hide non-active sections in JS for mobile */
+    }
+    .content-section.active, .image-section.active {
+        display: block; /* Show active section */
+    }
+    .graphic-element {
+        width: 150px;
+        height: 50px;
+        /* Adjust positioning for smaller bar */
+        top: calc(50% - 25px); /* Half height */
+        left: calc(50% - 125px); /* Width - dot offset */
+        transform-origin: 125px 25px; /* Adjusted origin */
+    }
+    .image-placeholder {
+        width: 80%;
+        height: 300px;
+    }
+}
